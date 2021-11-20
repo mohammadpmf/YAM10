@@ -1,3 +1,4 @@
+from tkinter import *
 class Ticket():
     def __init__(self, origin = 'Rasht'
                 , destination= 'Tehran',
@@ -16,3 +17,6 @@ class Ticket():
         self.age = age
         self.national_code = national_code
         self.price = price
+    def get_ticket_info(self):
+        return (self.origin, self.destination, self.departure_date, self.ticket_type,
+                self.name, self.family, self.age, self.national_code, self.price)

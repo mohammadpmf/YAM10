@@ -1,9 +1,13 @@
-from airplane import Airplane
+from ticket import Ticket
 from tkinter import *
 from tkinter import ttk, messagebox
+from enroll import Enroll
+
 def enter():
     if username.get() == 'admin' and password.get() == 'admin':
-        pass
+        t = Ticket()
+        e = Enroll(root, t)
+
     else:
         messagebox.showerror('', 'Wrong password')
 root = Tk()

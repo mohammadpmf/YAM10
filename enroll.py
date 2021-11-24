@@ -1,4 +1,3 @@
-import tkinter
 import tkcalendar
 from ticket import *
 from tkinter import ttk
@@ -40,4 +39,11 @@ class Enroll():
         # departure_date.grid(row=3, column=2)
         self.departure_date = tkcalendar.DateEntry(self.top, selectmode = 'day', year = 2021, month = 12,day = 1)
         self.departure_date.grid(row=3, column=2, sticky='news')
-
+        Button(self.top, text='Register', command=self.register).grid(row=6, column=1, sticky='news')
+        Button(self.top, text='Cancel', command=self.top.destroy).grid(row=6, column=2, sticky='news')
+    def register(self):
+        print(self.sv_origin.get())
+        print(self.sv_destination.get())
+        print(self.iv_price.get())
+        print(self.ticket_type.get())
+        print(self.departure_date.get())

@@ -1,4 +1,5 @@
 from ticket import Ticket
+from ship import Ship
 from tkinter import *
 from tkinter import ttk, messagebox
 from enroll import Enroll
@@ -43,7 +44,8 @@ def buy_airplane_ticket():
 def buy_train_ticket():
     pass
 def buy_ship_ticket():
-    pass
+    sh = Ship()
+    sh.make_form()
 def buy_bus_ticket():
     pass
 Button(tab_costumer, text='Buy an airplane ticket'

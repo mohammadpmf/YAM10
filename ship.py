@@ -72,6 +72,34 @@ class Ship():
         rb1.place(x=400, y=160, width=70, height=30)
         rb2.place(x=330, y=160, width=70, height=30)
         rb3.place(x=260, y=160, width=70, height=30)
+        def show_result():
+            def clicked(event):
+                # item = treev.identify('item',event.x,event.y)
+                curItem = treev.focus()
+                print (treev.item(curItem))
+                # print("you clicked on", treev.item(item,"text"))
+            t2 = Toplevel(t)
+            treev = ttk.Treeview(t2, height=5, selectmode ='browse', columns=("1", "2", "3","4","5"), show='headings')
+            treev.grid(row=1, column=1)
+            vertical_scrlbar = ttk.Scrollbar(t2,orient ="vertical",command = treev.yview)
+            vertical_scrlbar.grid(row=1, column=2, sticky='ns')
+            treev.configure(yscrollcommand = vertical_scrlbar.set)
+
+            treev.column("1", width=100, anchor ='c')
+            treev.column("2", width=150, anchor ='c')
+            treev.column("3", width=150, anchor ='c')
+            treev.column("4", width=150, anchor ='c')
+            treev.column("5", width=100, anchor ='c')
+
+            treev.heading("1", text ="origin")
+            treev.heading("2", text ="destination")
+            treev.heading("3", text ="departure_date")
+            treev.heading("4", text ="ticket_type")
+            treev.heading("5", text ="price")
+            for i in range(20):
+                treev.insert("", 'end', text=i, values=(i, 2*i, 3*i, 4*i, 5*i))
+
+            treev.bind('<Double-1>', clicked)
 
         def show_price():
             last_price=1
@@ -102,11 +130,12 @@ class Ship():
 
 
 
-        btn_show = Button(t, text="show the price", command=show_price, activebackground="#90CAF9")
+        btn_show = Button(t, text="show the price", command=show_result, activebackground="#90CAF9")
         btn_show.place(x=15, y=145, width=220, height=15)
         e_price = Entry(t)
         e_price.place(x=60, y=165, width=175, height=20)
         lbl_price = Label(t, text="price :", bg="#2196F3", fg="white")
         lbl_price.place(x=15, y=165, width=40, height=20)
+
         mainloop()
 

@@ -25,6 +25,7 @@ lbl_cnf ={
     'font':('Tahoma', 12, 'italic')
 }
 btn_cnf ={
+    'bd': '2',
     'fg':'#008800',
     'bg':'#222222',
     'font':('Tahoma', 12, 'italic')

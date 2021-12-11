@@ -1,8 +1,7 @@
 import sqlalchemy as db
 
 import tkinter as tk
-from tkinter import StringVar, ttk
-from datetime import datetime
+from tkinter import StringVar
 
 engine = db.create_engine('mysql+pymysql://root:root@localhost:3306/jjjjj')
 connection = engine.connect()
@@ -48,8 +47,4 @@ tk.Entry(root, textvariable=t3).pack()
 tk.Button(root, text='show', command=show).pack()
 tk.Entry(root, textvariable=t4).pack()
 
-n = datetime.now()
-n.year
-n.month
-n.day
 root.mainloop()

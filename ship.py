@@ -2,6 +2,9 @@ from tkinter import*
 from ticket import *
 from tkinter import ttk
 from tkinter import messagebox
+import sqlalchemy as db
+cities = ['Rasht', 'Tehran', 'Shiraz', 'Isfahan', 'Mashhad']
+
 class Ship():
     def __init__(self, origin='Rasht'
                  ,destination = 'Tehran'
@@ -21,6 +24,10 @@ class Ship():
         self.national_cod=national_cod
         self.price=price
     def make_form(self):
+        self.engine = db.create_engine('mysql+pymysql://root:root@localhost:3306/YAM_Ticket')
+        self.connection = self.engine.connect()
+        self.metadata = db.MetaData()
+        self.tbl_tickets = db.Table("tbl_tickets", self.metadata, autoload=True, autoload_with=self.engine)
 
         t = Toplevel()
         t.geometry("480x200")
@@ -48,11 +55,11 @@ class Ship():
         e_name.place(x=370, y=30, width=100, height=30)
         lbl_origin = Label(t, text="origin", fg="#2196F3")
         lbl_origin.place(x=370, y=70, width=100, height=30)
-        combo_origin = ttk.Combobox(t, values=('A', 'B', 'C'))
+        combo_origin = ttk.Combobox(t, values=(cities))
         combo_origin.place(x=370, y=100, width=100, height=30)
         lbl_destination = Label(t, text="destination", fg="#2196F3")
         lbl_destination.place(x=250, y=70, width=100, height=30)
-        combo_destination = ttk.Combobox(t, values=('A', 'B', 'C'))
+        combo_destination = ttk.Combobox(t, values=(cities))
         combo_destination.place(x=250, y=100, width=100, height=30)
         lbl_departure_date = Label(t, text="departure date", fg="#2196F3")
         lbl_departure_date.place(x=70, y=70, width=100, height=30)
@@ -96,6 +103,10 @@ class Ship():
             treev.heading("3", text ="departure_date")
             treev.heading("4", text ="ticket_type")
             treev.heading("5", text ="price")
+            query = db.select(self.tbl_tickets).where(self.tbl_tickets.c.origin == combo_origin.get() and self.tbl_tickets.c.destination == combo_destination.get())
+            result = self.connection.execute(query)
+            for i in result:
+                print(i)
             for i in range(20):
                 treev.insert("", 'end', text=i, values=(i, 2*i, 3*i, 4*i, 5*i))
 

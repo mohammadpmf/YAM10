@@ -83,8 +83,14 @@ class Ship():
             def clicked(event):
                 # item = treev.identify('item',event.x,event.y)
                 curItem = treev.focus()
-                print (treev.item(curItem))
+                self.price = treev.item(curItem)['values'][-1]
+                # print(treev.item(curItem)['values'][-1])
+                # print (treev.item(curItem))
                 # print("you clicked on", treev.item(item,"text"))
+                e_price.delete(0, END)
+                e_price.insert(0, str(self.price)+ "$")
+                btn_buy['state'] = 'normal'
+                t2.destroy()
             t2 = Toplevel(t)
             treev = ttk.Treeview(t2, height=5, selectmode ='browse', columns=("1", "2", "3","4","5"), show='headings')
             treev.grid(row=1, column=1)
@@ -103,12 +109,24 @@ class Ship():
             treev.heading("3", text ="departure_date")
             treev.heading("4", text ="ticket_type")
             treev.heading("5", text ="price")
-            query = db.select(self.tbl_tickets).where(self.tbl_tickets.c.origin == combo_origin.get() and self.tbl_tickets.c.destination == combo_destination.get())
+            def make_query_string():
+                result = ''
+                combo_origin.get()
+                combo_destination.get()
+                spin_year.get()
+                spin_month.get()
+                spin_day.get()
+                if ticket_type.get() == 1:
+                    'economy'
+                elif ticket_type.get() == 2:
+                    'first class'
+                elif ticket_type.get()==3:
+                    'business'
+                
+            query = db.select(self.tbl_tickets).where(self.tbl_tickets.c.origin == 'Rasht')
             result = self.connection.execute(query)
             for i in result:
-                print(i)
-            for i in range(20):
-                treev.insert("", 'end', text=i, values=(i, 2*i, 3*i, 4*i, 5*i))
+                treev.insert("", 'end', text=i, values=(i[1], i[2], i[3], i[4], i[6]))
 
             treev.bind('<Double-1>', clicked)
 
@@ -139,10 +157,14 @@ class Ship():
             e_price.insert(0, str(last_price) + "$")
             # print(last_price)
 
+        def buy():
+            pass
 
 
         btn_show = Button(t, text="show the price", command=show_result, activebackground="#90CAF9")
         btn_show.place(x=15, y=145, width=220, height=15)
+        btn_buy = Button(t, text="Buy this ticket", command=buy,  activebackground="#90CAF9", state='disabled')
+        btn_buy.place(x=0, y=145, width=100, height=15)
         e_price = Entry(t)
         e_price.place(x=60, y=165, width=175, height=20)
         lbl_price = Label(t, text="price :", bg="#2196F3", fg="white")

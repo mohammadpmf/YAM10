@@ -23,11 +23,13 @@ class Ship():
         self.age=age
         self.national_cod=national_cod
         self.price=price
+        self.id_ticket = 0
     def make_form(self):
         self.engine = db.create_engine('mysql+pymysql://root:root@localhost:3306/YAM_Ticket')
         self.connection = self.engine.connect()
         self.metadata = db.MetaData()
         self.tbl_tickets = db.Table("tbl_tickets", self.metadata, autoload=True, autoload_with=self.engine)
+        self.tbl_costumers = db.Table("tbl_costumers", self.metadata, autoload=True, autoload_with=self.engine)
 
         t = Toplevel()
         t.geometry("480x200")
@@ -79,11 +81,17 @@ class Ship():
         rb1.place(x=400, y=160, width=70, height=30)
         rb2.place(x=330, y=160, width=70, height=30)
         rb3.place(x=260, y=160, width=70, height=30)
+        def return_date():
+                date=f'{spin_year.get()}-{spin_month.get()}-{spin_day.get()}'
+                return date
         def show_result():
             def clicked(event):
                 # item = treev.identify('item',event.x,event.y)
                 curItem = treev.focus()
                 self.price = treev.item(curItem)['values'][-1]
+                self.id_ticket = int(treev.item(curItem)['text'][1:3])
+                print(treev.item(curItem)['text'])
+                print(self.id_ticket)
                 # print(treev.item(curItem)['values'][-1])
                 # print (treev.item(curItem))
                 # print("you clicked on", treev.item(item,"text"))
@@ -109,21 +117,20 @@ class Ship():
             treev.heading("3", text ="departure_date")
             treev.heading("4", text ="ticket_type")
             treev.heading("5", text ="price")
-            def make_query_string():
-                result = ''
-                combo_origin.get()
-                combo_destination.get()
-                spin_year.get()
-                spin_month.get()
-                spin_day.get()
+            def return_ticket_type():
                 if ticket_type.get() == 1:
-                    'economy'
+                    return 'economy'
                 elif ticket_type.get() == 2:
-                    'first class'
+                    return 'first class'
                 elif ticket_type.get()==3:
-                    'business'
+                    return 'business class'
                 
-            query = db.select(self.tbl_tickets).where(self.tbl_tickets.c.origin == 'Rasht')
+            query = db.select(self.tbl_tickets).where(
+                self.tbl_tickets.c.origin == combo_origin.get(),
+                self.tbl_tickets.c.destination==combo_destination.get(),
+                self.tbl_tickets.c.depart_date==return_date(),
+                self.tbl_tickets.c.ticket_type==return_ticket_type()
+            )
             result = self.connection.execute(query)
             for i in result:
                 treev.insert("", 'end', text=i, values=(i[1], i[2], i[3], i[4], i[6]))
@@ -158,8 +165,19 @@ class Ship():
             # print(last_price)
 
         def buy():
-            pass
-
+            query = db.insert(self.tbl_costumers).values(
+            {
+                'name': e_name.get(),
+                'family': e_family.get(),
+                'national_code': e_nt_cod.get(),
+                'age': s_age.get(),
+                'id_ticket': self.id_ticket,
+            })
+            try:
+                self.connection.execute(query)
+                messagebox.showinfo('Success', 'Ticket Successfully added to DB')
+            except:
+                messagebox.showwarning('warning', 'something went wrong')
 
         btn_show = Button(t, text="show the price", command=show_result, activebackground="#90CAF9")
         btn_show.place(x=15, y=145, width=220, height=15)

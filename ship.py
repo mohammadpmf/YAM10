@@ -89,7 +89,13 @@ class Ship():
                 # item = treev.identify('item',event.x,event.y)
                 curItem = treev.focus()
                 self.price = treev.item(curItem)['values'][-1]
-                self.id_ticket = int(treev.item(curItem)['text'][1:3])
+                try:
+                    self.id_ticket = int(treev.item(curItem)['text'][1:3])
+                except:
+                    try:
+                        self.id_ticket = int(treev.item(curItem)['text'][1])
+                    except:
+                        print('bad id format while reading id')
                 print(treev.item(curItem)['text'])
                 print(self.id_ticket)
                 # print(treev.item(curItem)['values'][-1])

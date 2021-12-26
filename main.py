@@ -1,3 +1,4 @@
+from train import Train
 from ticket import Ticket
 from ship import Ship
 from tkinter import *
@@ -43,7 +44,8 @@ Button(tab_manager, text='OK', command=enter, cnf=btn_cnf).grid(row=3, column=1,
 def buy_airplane_ticket():
     pass
 def buy_train_ticket():
-    pass
+    tr = Train()
+    tr.make_form()
 def buy_ship_ticket():
     sh = Ship()
     sh.make_form()
